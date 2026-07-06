@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: eth
+    database: eth  
+    schema: eth_schema
+    # quoting: (puts "quotes" around elements in "from" clause)
+    #   database: true
+    #   schema: true
+
+    tables:
+      - name: contracts
+        # identifier: cnt
+      - name: contracts_clone
+      - name: token_transfers
+      - name: transactions
+        # description: Transactions in the Ethereum blockchain
+        columns:
+          - name: hash
+            # description: >
+            #   This is a very long multiline description about the unique
+            #   identifier of each transaction in the Ethereum blockchain
+            data_tests:
+              - unique
+              - not_null
