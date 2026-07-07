@@ -10,9 +10,15 @@ sources:
 
     tables:
       - name: contracts
-        # identifier: cnt
-      - name: contracts_clone
+        # identifier: cnt      
       - name: token_transfers
+        description: Transactions in the Etherum Blockchain
+        columns:
+          - name: transaction_hash
+            data_tests:
+              - relationships:
+                  to: ref('stg_transactions')
+                  field: hash
       - name: transactions
         # description: Transactions in the Ethereum blockchain
         columns:
@@ -20,6 +26,15 @@ sources:
             # description: >
             #   This is a very long multiline description about the unique
             #   identifier of each transaction in the Ethereum blockchain
+            # description: "{{ doc('transactions') }}"
             data_tests:
               - unique
               - not_null
+              # - relationships:
+              #     to: ref('stg_token_transfers')
+              #     field: transaction_hash
+              #     severity: warn
+              #     config:
+              #       store_failures: true
+              #       store_failures_as: table
+              #       where: date > current_date - 25
