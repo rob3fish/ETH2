@@ -1,2 +1,41 @@
 version: 2
 
+models:
+  - name: fct_stablecoin_activity_per_day
+    latest_version: 1
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: date
+        data_type: date
+      - name: token_address
+        data_type: varchar
+      - name: type
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              values: ["Hybrid","Crypto-backed","Fiat-backed"]
+      - name: symbol
+        data_type: varchar
+      - name: total_usd_value
+        data_type: float
+
+    versions:    
+      - v: 1
+        deprecation_date: 2030-01-01
+        # Matches what's above -- nothing more needed    
+      - v: 2
+        columns:
+          - include: all
+            exclude: [token_address, symbol]
+
+exposures:
+  - name: fct_eth_activity_per_day
+    type: dashboard
+    owner:
+      name: Your Name
+      email: your_email@udemy.com
+    depends_on:
+      - ref('int_transactions_enriched')
+

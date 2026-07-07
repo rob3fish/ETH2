@@ -1,2 +1,31 @@
 version: 2
 
+models:
+  - name: int_transactions_enriched
+    columns:
+      - name: value
+        data_tests:
+          - assert_value_amount_is_positive:
+              field: block_number
+
+unit_tests:
+  - name: test_is_valid_transation_category_breakdown
+    model: int_transactions_enriched
+    overrides:
+      macros:
+        # unit test this model in "full refresh" mode
+        is_incremental: false
+    given:
+      - input: ref('stg_transactions')
+        format: dict
+        rows:
+          - {receipt_contract_address: 'bla'}
+      - input: ref('stg_token_transfers')
+      # must be present as an input, even if it is not tested
+        format: dict
+        rows:
+          - {transaction_hash: 'bla'}
+    expect:
+      format: dict
+      rows:
+        - {transaction_category: 'contract_creation'}

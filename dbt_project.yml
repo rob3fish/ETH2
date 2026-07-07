@@ -30,14 +30,26 @@ models:
   eth_project:
     +materialized: table
     +tags: ['eth', 'crypto']
+
+    1_staging:
+      +materialized: view
+
     3_marts:
       +tags:
         - powerbi
         - report
-      # +schema: marts
+      +schema: marts
+      
+      fct_stablecoin_activity_per_day:
+        +post-hook:
+          # - GRANT USAGE ON DATABASE DBT TO ROLE TESTER;
+          # - GRANT USAGE ON SCHEMA DBT.DBT_ROB3FISH_MARTS TO ROLE TESTER;
+          # - GRANT USAGE ON DATABASE DBT TO ROLE BA;
+          # - GRANT USAGE ON SCHEMA DBT.DBT_ROB3FISH_MARTS TO ROLE BA;
+          - "{{ create_latest_version_view() }}"
+        +grants:
+          select: []          
 
-    1_staging:
-      +materialized: view
 
 vars:
   token_name_var: 'link'
